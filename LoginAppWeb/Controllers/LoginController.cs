@@ -1,5 +1,6 @@
 ﻿    using LoginAppWeb.Models;
 using LoginAppWeb.Services.Business;
+using LoginAppWeb.Services.Utility;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace LoginAppWeb.Controllers
 {
     public class LoginController : Controller
     {
-        private static Logger logger = LogManager.GetLogger("myAppLogerrule");
+        //private static Logger logger = LogManager.GetLogger("myAppLogerrule");
         // GET: Login
         public ActionResult Index()
         {
@@ -19,25 +20,25 @@ namespace LoginAppWeb.Controllers
         }
         public ActionResult Login(UserModel userModel)
         {
-            logger.Info("Entering the login controller. Login method");
+            MyLogger.GetInstance().Info("Entering the login controller. Login method");
             try
             {
                 SecurityService securityService = new SecurityService();
                 bool success = securityService.Authenticate(userModel);
                 if (success)
                 {
-                    logger.Info("Exit login controller. Login success.");
+                    MyLogger.GetInstance().Info("Exit login controller. Login success.");
                     return View("LoginSuccess", userModel);
                 }
                 else
                 {
-                    logger.Info("Exit login controller. Login failure!");
+                    MyLogger.GetInstance().Info("Exit login controller. Login failure!");
                     return View("LoginFailure");
                 }
             }
             catch(Exception ex)
             {
-                logger.Error($"Exception {ex.Message}");
+                MyLogger.GetInstance().Error($"Exception {ex.Message}");
                 return Content($"Exception in login {ex.Message}");
             }
             //return $"Results. Username = {userModel.Username}. Password = {userModel.Password}";
